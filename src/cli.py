@@ -129,6 +129,7 @@ def run_pipeline(mode: str) -> dict[str, Any]:
             "openf1": {
                 "enabled": openf1.get("enabled"),
                 "status": openf1.get("status"),
+                "notes": openf1.get("notes", []),
             },
         },
         "lineups": lineups,

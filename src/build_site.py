@@ -46,23 +46,115 @@ def _base_html(title: str, body: str) -> str:
 def _style() -> str:
     return """
 :root {
-  --bg: #f5f1ea;
-  --panel: #fffaf2;
-  --text: #1f2933;
-  --accent: #d1495b;
-  --ink: #2b2d42;
+  --bg: #f7efe1;
+  --bg2: #f2deba;
+  --panel: #fff9ef;
+  --text: #17212b;
+  --muted: #4f5f70;
+  --accent: #c44536;
+  --accent2: #0f766e;
+  --ink: #1e293b;
+  --line: #decfbb;
+  --shadow: 0 12px 28px rgba(23, 33, 43, 0.12);
 }
-body { margin:0; font-family: Georgia, 'Times New Roman', serif; background: radial-gradient(circle at top right, #ffddb0, var(--bg)); color:var(--text); }
-.top { padding: 1rem 1.25rem; border-bottom: 1px solid #dccfbf; background: rgba(255,250,242,0.9); position: sticky; top:0; }
-nav a { margin-right: 1rem; color: var(--ink); text-decoration: none; font-weight: 600; }
-main { max-width: 1000px; margin: 1rem auto; padding: 1rem; }
-.card { background: var(--panel); border: 1px solid #dfd3c3; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 8px 20px rgba(43,45,66,.07); }
-button.tab { background: #f4e6d0; border: 1px solid #d5c2a8; padding: .5rem .75rem; margin-right: .5rem; cursor: pointer; }
-button.tab.active { background: var(--accent); color: white; border-color: var(--accent); }
-pre { white-space: pre-wrap; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Palatino Linotype', Palatino, Georgia, serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 12% 12%, #fff3dc 0, transparent 38%),
+    radial-gradient(circle at 88% 18%, #f8d7a5 0, transparent 30%),
+    linear-gradient(180deg, var(--bg2), var(--bg));
+}
+.top {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 249, 239, 0.92);
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.top h1 { margin: 0; font-size: 1.45rem; letter-spacing: 0.03em; }
+nav { margin-top: 0.35rem; }
+nav a {
+  margin-right: 0.8rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+  border-bottom: 2px solid transparent;
+}
+nav a:hover { border-bottom-color: var(--accent); }
+main { max-width: 1080px; margin: 1rem auto; padding: 1rem; animation: fadein 350ms ease-out; }
+.hero {
+  background: linear-gradient(130deg, #fffaf0 0%, #fce8c9 60%, #f8d4a3 100%);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 0.9rem;
+}
+.hero p { margin: 0.35rem 0; color: var(--muted); }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0.7rem; margin: 0.85rem 0; }
+.stat {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+.stat .k { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.stat .v { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.9rem;
+  box-shadow: var(--shadow);
+}
+.tab-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+button.tab {
+  background: #f0dec4;
+  border: 1px solid #d4bea0;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+}
+button.tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+pre {
+  white-space: pre-wrap;
+  background: #f7f0e4;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.8rem;
+}
 .table { width:100%; border-collapse: collapse; }
-.table th,.table td { border-bottom: 1px solid #e8ddcf; text-align:left; padding: .35rem; }
+.table th,.table td { border-bottom: 1px solid #e8ddcf; text-align:left; padding: .4rem; }
+.table th { color: var(--muted); font-size: 0.85rem; }
 .warn { color:#8a1c1c; font-weight:700; }
+.pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.22rem 0.55rem;
+  border: 1px solid #cab08d;
+  background: #f8ead5;
+  font-size: 0.8rem;
+  margin-right: 0.4rem;
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 640px) {
+  .top h1 { font-size: 1.2rem; }
+  .stats { grid-template-columns: 1fr; }
+  nav a { display: inline-block; margin-bottom: 0.35rem; }
+}
 """
 
 
@@ -89,7 +181,7 @@ def build_site(config_path: str = "config.yaml") -> None:
         panes.append(
             f"""<section id='tab-{name}' class='card tab-pane' style='display:none'>
             <h2>{name.title()} Strategy</h2>
-            <p>Captain: <strong>{lineup['captain']}</strong> | Cost: {lineup['total_cost']}</p>
+            <p><span class='pill'>Captain {lineup['captain']}</span><span class='pill'>Cost {lineup['total_cost']}</span><span class='pill'>Solver {lineup.get('solver','n/a')}</span></p>
             <p>Expected points: {lineup['expected_points']['total']} (objective-adjusted {lineup['expected_points']['objective_adjusted']})</p>
             <h3>Drivers</h3>
             <table class='table'><tr><th>Name</th><th>Cost</th><th>Expected</th></tr>{drivers_rows}</table>
@@ -98,8 +190,21 @@ def build_site(config_path: str = "config.yaml") -> None:
             </section>"""
         )
 
+    balanced = strategies.get("balanced", {})
+    transfer = data.get("transfer_plan", {})
+    chip = data.get("chip_suggestion", {})
     home_body = f"""
-    <div class='card'><h2>Recommended Lineup</h2><p>Updated: {data.get('meta', {}).get('generated_at_utc')}</p>{tabs}</div>
+    <section class='hero'>
+      <h2>Recommended Lineup Dashboard</h2>
+      <p>Data timestamp: <strong>{data.get('meta', {}).get('generated_at_utc')}</strong></p>
+      <div class='stats'>
+        <div class='stat'><div class='k'>Balanced Points</div><div class='v'>{balanced.get('expected_points', {}).get('total', 'N/A')}</div></div>
+        <div class='stat'><div class='k'>Balanced Cost</div><div class='v'>{balanced.get('total_cost', 'N/A')}</div></div>
+        <div class='stat'><div class='k'>Transfer Penalty</div><div class='v'>{transfer.get('penalty', 0)}</div></div>
+        <div class='stat'><div class='k'>Chip Suggestion</div><div class='v'>{chip.get('chip', 'N/A')}</div></div>
+      </div>
+    </section>
+    <div class='card'><h2>Strategy Compare</h2><div class='tab-row'>{tabs}</div></div>
     {''.join(panes)}
     <script>
     const tabs=[...document.querySelectorAll('.tab')];

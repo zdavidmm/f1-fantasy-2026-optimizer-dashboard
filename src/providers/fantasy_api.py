@@ -34,6 +34,66 @@ class FantasyFetchResult(BaseModel):
     warnings: list[str]
 
 
+def _heuristic_driver_price(position: int) -> float:
+    # Basic market-like price curve when official fantasy prices are unavailable.
+    return round(max(8.0, 32.0 - position * 1.35), 1)
+
+
+def _heuristic_constructor_price(position: int) -> float:
+    return round(max(10.0, 30.0 - position * 2.0), 1)
+
+
+def _fetch_jolpi_fallback(timeout_seconds: int) -> tuple[list[Driver], list[Constructor], list[str]]:
+    warnings: list[str] = []
+    drivers: list[Driver] = []
+    constructors: list[Constructor] = []
+    try:
+        d_res = requests.get("https://api.jolpi.ca/ergast/f1/current/drivers.json", timeout=timeout_seconds)
+        d_res.raise_for_status()
+        d_payload = d_res.json()
+        d_items = (
+            d_payload.get("MRData", {})
+            .get("DriverTable", {})
+            .get("Drivers", [])
+        )
+        for idx, item in enumerate(d_items, start=1):
+            given = str(item.get("givenName") or "").strip()
+            family = str(item.get("familyName") or "").strip()
+            name = f"{given} {family}".strip() or str(item.get("driverId") or "Unknown Driver")
+            drivers.append(
+                Driver(
+                    id=str(item.get("driverId") or f"drv_{idx}"),
+                    name=name,
+                    team="Unknown",
+                    price=_heuristic_driver_price(idx),
+                )
+            )
+    except Exception as exc:  # noqa: BLE001
+        warnings.append(f"Jolpica driver fallback unavailable: {exc}")
+
+    try:
+        c_res = requests.get("https://api.jolpi.ca/ergast/f1/current/constructors.json", timeout=timeout_seconds)
+        c_res.raise_for_status()
+        c_payload = c_res.json()
+        c_items = (
+            c_payload.get("MRData", {})
+            .get("ConstructorTable", {})
+            .get("Constructors", [])
+        )
+        for idx, item in enumerate(c_items, start=1):
+            constructors.append(
+                Constructor(
+                    id=str(item.get("constructorId") or f"con_{idx}"),
+                    name=str(item.get("name") or "Unknown Constructor"),
+                    price=_heuristic_constructor_price(idx),
+                )
+            )
+    except Exception as exc:  # noqa: BLE001
+        warnings.append(f"Jolpica constructor fallback unavailable: {exc}")
+
+    return drivers, constructors, warnings
+
+
 def _extract_first(payload: Any) -> list[dict[str, Any]]:
     if isinstance(payload, list):
         return [x for x in payload if isinstance(x, dict)]
@@ -80,7 +140,7 @@ def _fetch_with_fallback(
             save_json(raw_dir / f"{cache_file.stem}_{now}.json", payload)
             return payload, f"live:{url}"
         except Exception as exc:  # noqa: BLE001
-            logger.warning("Endpoint failed %s: %s", url, exc)
+            logger.info("Endpoint failed %s: %s", url, exc)
     cached = load_json(cache_file)
     if cached is not None:
         return cached, "cached"
@@ -131,6 +191,18 @@ def fetch_fantasy_data(config: dict[str, Any]) -> FantasyFetchResult:
             warnings.append(f"constructor_parse_failed:{item}")
 
     events = _extract_first(events_payload)
+
+    if not drivers or not constructors:
+        jolpi_drivers, jolpi_constructors, jolpi_warnings = _fetch_jolpi_fallback(
+            timeout_seconds=int(fantasy_cfg.get("timeout_seconds", 15))
+        )
+        warnings.extend(jolpi_warnings)
+        if not drivers and jolpi_drivers:
+            drivers = jolpi_drivers
+            drivers_status = "fallback:jolpica"
+        if not constructors and jolpi_constructors:
+            constructors = jolpi_constructors
+            constructors_status = "fallback:jolpica"
 
     if not drivers:
         warnings.append("No drivers from fantasy API; using synthetic fallback pool")

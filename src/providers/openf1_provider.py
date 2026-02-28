@@ -12,7 +12,8 @@ def fetch_openf1_data() -> dict[str, Any]:
         return {
             "enabled": False,
             "status": "skipped",
-            "warnings": ["OPENF1_API_KEY not set; real-time OpenF1 integration skipped"],
+            "warnings": [],
+            "notes": ["OPENF1_API_KEY not set; real-time OpenF1 integration skipped"],
             "signals": {},
         }
 
