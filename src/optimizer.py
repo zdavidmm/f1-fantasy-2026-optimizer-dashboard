@@ -209,7 +209,8 @@ def _solve_with_bruteforce(drivers: list[DriverAsset], constructors: list[Constr
     risk_w = float(cfg["risk_weights"][strategy])
     growth_w = float(cfg["price_growth_weights"][strategy])
 
-    best: tuple[float, tuple[list[DriverAsset], list[ConstructorAsset]]] | None = None
+    best_selection: tuple[list[DriverAsset], list[ConstructorAsset]] | None = None
+    best_key: tuple[float, float, list[str], list[str]] | None = None
 
     for d_combo in itertools.combinations(drivers, 5):
         d_cost = sum(d.price for d in d_combo)
@@ -229,12 +230,13 @@ def _solve_with_bruteforce(drivers: list[DriverAsset], constructors: list[Constr
                 sorted(d.name for d in d_combo),
                 sorted(c.name for c in c_combo),
             )
-            if best is None or key > (best[0], -sum(x.price for x in best[1][0]) - sum(x.price for x in best[1][1]), sorted(x.name for x in best[1][0]), sorted(x.name for x in best[1][1])):
-                best = (score, (list(d_combo), list(c_combo)))
+            if best_key is None or key > best_key:
+                best_key = key
+                best_selection = (list(d_combo), list(c_combo))
 
-    if best is None:
+    if best_selection is None:
         raise RuntimeError("No feasible lineup from bruteforce")
-    return best[1]
+    return best_selection
 
 
 def optimize_lineups(dataset: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:

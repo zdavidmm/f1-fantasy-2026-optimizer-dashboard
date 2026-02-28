@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Run unit tests
+        run: pytest -q
+
       - name: Run optimizer pipeline
         env:
           OPENF1_API_KEY: ${{ secrets.OPENF1_API_KEY }}
