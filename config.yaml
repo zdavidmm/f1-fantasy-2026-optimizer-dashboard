@@ -1,4 +1,4 @@
-budget_cap: 180.0
+budget_cap: 100.0
 world_record_pitstop_threshold: 1.80
 model_weights:
   qualifying_form: 0.30

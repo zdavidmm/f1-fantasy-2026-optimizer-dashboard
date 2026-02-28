@@ -34,6 +34,15 @@ def _config(tmp_path: Path):
 
 def test_fetch_fantasy_data_best_effort_parsing(monkeypatch, tmp_path):
     payloads = {
+        "/feeds/schedule/raceday_en.json": {"Data": {"Value": [{"GamedayId": 1, "GDIsCurrent": 1, "CurrentGamedayId": 1}]}},
+        "/feeds/drivers/1_en.json": {
+            "Data": {
+                "Value": [
+                    {"PlayerId": 101, "Skill": 1, "FUllName": "Driver One", "TeamName": "TeamA", "Value": 12.5},
+                    {"PlayerId": 201, "Skill": 2, "DisplayName": "Ctor One", "Value": 20.0},
+                ]
+            }
+        },
         "/drivers": {"players": [{"id": 1, "full_name": "Driver One", "team_name": "TeamA", "price": 12.5}]},
         "/constructors": {"constructors": [{"constructor_id": "c1", "name": "Ctor One", "cost": 20}]},
         "/events": {"events": [{"id": 10, "name": "GP"}]},
@@ -53,7 +62,7 @@ def test_fetch_fantasy_data_best_effort_parsing(monkeypatch, tmp_path):
     assert len(res.constructors) == 1
     assert res.constructors[0].name == "Ctor One"
     assert len(res.events) == 1
-    assert res.source_status["fantasy_drivers"].startswith("live:")
+    assert res.source_status["fantasy_drivers"].startswith("live:https://fantasy.formula1.com/feeds/")
 
 
 def test_fetch_fantasy_data_fallback_to_synthetic_when_unavailable(monkeypatch, tmp_path):

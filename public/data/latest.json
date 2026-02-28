@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generated_at_utc": "2026-02-28T17:44:16Z",
+    "generated_at_utc": "2026-02-28T17:58:44Z",
     "mode": "all"
   },
   "sources": {
     "fantasy_api": {
-      "fantasy_drivers": "fallback:jolpica",
-      "fantasy_constructors": "fallback:jolpica",
-      "fantasy_events": "missing"
+      "fantasy_drivers": "live:https://fantasy.formula1.com/feeds/drivers/1_en.json",
+      "fantasy_constructors": "live:https://fantasy.formula1.com/feeds/drivers/1_en.json",
+      "fantasy_events": "live:https://fantasy.formula1.com/feeds/schedule/raceday_en.json"
     },
     "fastf1": {
       "status": "ok",
@@ -31,10 +31,34 @@
         "strategy": "safe",
         "drivers": [
           {
-            "id": "leclerc",
+            "id": "121",
+            "name": "Sergio Perez",
+            "team": "Cadillac",
+            "price": 6.0,
+            "expected_quali": 2.1,
+            "expected_sprint": 0.4,
+            "expected_race": 3.5,
+            "dnf_risk": 0.15,
+            "price_growth": 0.425,
+            "expected_total": 6.0
+          },
+          {
+            "id": "13",
+            "name": "Valtteri Bottas",
+            "team": "Cadillac",
+            "price": 5.9,
+            "expected_quali": 2.1,
+            "expected_sprint": 0.4,
+            "expected_race": 3.5,
+            "dnf_risk": 0.15,
+            "price_growth": 0.425,
+            "expected_total": 6.0
+          },
+          {
+            "id": "115",
             "name": "Charles Leclerc",
-            "team": "Unknown",
-            "price": 14.4,
+            "team": "Ferrari",
+            "price": 22.8,
             "expected_quali": 3.5999999999999996,
             "expected_sprint": 0.0,
             "expected_race": 4.8999999999999995,
@@ -43,10 +67,10 @@
             "expected_total": 8.5
           },
           {
-            "id": "norris",
+            "id": "117",
             "name": "Lando Norris",
-            "team": "Unknown",
-            "price": 11.8,
+            "team": "McLaren",
+            "price": 27.2,
             "expected_quali": 5.3999999999999995,
             "expected_sprint": 0.0,
             "expected_race": 5.6,
@@ -55,47 +79,23 @@
             "expected_total": 11.0
           },
           {
-            "id": "piastri",
+            "id": "1982",
             "name": "Oscar Piastri",
-            "team": "Unknown",
-            "price": 9.0,
+            "team": "McLaren",
+            "price": 25.5,
             "expected_quali": 4.8,
             "expected_sprint": 0.0,
             "expected_race": 6.3,
             "dnf_risk": 0.12,
             "price_growth": 0.85,
             "expected_total": 11.1
-          },
-          {
-            "id": "russell",
-            "name": "George Russell",
-            "team": "Unknown",
-            "price": 8.0,
-            "expected_quali": 4.2,
-            "expected_sprint": 0.0,
-            "expected_race": 4.199999999999999,
-            "dnf_risk": 0.12,
-            "price_growth": 0.65,
-            "expected_total": 8.4
-          },
-          {
-            "id": "max_verstappen",
-            "name": "Max Verstappen",
-            "team": "Unknown",
-            "price": 8.0,
-            "expected_quali": 6.0,
-            "expected_sprint": 0.0,
-            "expected_race": 7.0,
-            "dnf_risk": 0.12,
-            "price_growth": 1.0,
-            "expected_total": 13.0
           }
         ],
         "constructors": [
           {
-            "id": "cadillac",
-            "name": "Cadillac F1 Team",
-            "price": 22.0,
+            "id": "2640",
+            "name": "Audi",
+            "price": 6.6,
             "expected_quali": 1.5,
             "expected_sprint": 0.4,
             "expected_race": 2.8,
@@ -105,9 +105,9 @@
             "expected_total": 5.2
           },
           {
-            "id": "rb",
-            "name": "RB F1 Team",
-            "price": 12.0,
+            "id": "2641",
+            "name": "Cadillac",
+            "price": 6.0,
             "expected_quali": 1.5,
             "expected_sprint": 0.4,
             "expected_race": 2.8,
@@ -117,30 +117,30 @@
             "expected_total": 5.2
           }
         ],
-        "captain": "Max Verstappen",
+        "captain": "Oscar Piastri",
         "multipliers": {
           "captain": 2,
           "vice_captain": 1.2,
-          "vice_captain_name": "Oscar Piastri"
+          "vice_captain_name": "Lando Norris"
         },
-        "total_cost": 85.2,
+        "total_cost": 100.0,
         "expected_points": {
-          "total": 62.4,
-          "objective_adjusted": 60.93,
+          "total": 53.0,
+          "objective_adjusted": 50.878,
           "breakdown": {
-            "qualifying": 27.0,
-            "sprint": 0.8,
-            "race": 33.6,
+            "qualifying": 21.0,
+            "sprint": 1.6,
+            "race": 29.4,
             "pitstop": 1.0
           }
         },
         "risk": {
-          "downside_proxy": 0.129,
-          "avg_driver_dnf_risk": 0.12,
+          "downside_proxy": 0.1374,
+          "avg_driver_dnf_risk": 0.132,
           "avg_constructor_dnf_risk": 0.15
         },
         "growth": {
-          "price_growth_proxy": 4.8
+          "price_growth_proxy": 4.0
         },
         "solver": "pulp"
       },
@@ -148,10 +148,34 @@
         "strategy": "balanced",
         "drivers": [
           {
-            "id": "leclerc",
+            "id": "121",
+            "name": "Sergio Perez",
+            "team": "Cadillac",
+            "price": 6.0,
+            "expected_quali": 2.1,
+            "expected_sprint": 0.4,
+            "expected_race": 3.5,
+            "dnf_risk": 0.15,
+            "price_growth": 0.425,
+            "expected_total": 6.0
+          },
+          {
+            "id": "13",
+            "name": "Valtteri Bottas",
+            "team": "Cadillac",
+            "price": 5.9,
+            "expected_quali": 2.1,
+            "expected_sprint": 0.4,
+            "expected_race": 3.5,
+            "dnf_risk": 0.15,
+            "price_growth": 0.425,
+            "expected_total": 6.0
+          },
+          {
+            "id": "115",
             "name": "Charles Leclerc",
-            "team": "Unknown",
-            "price": 14.4,
+            "team": "Ferrari",
+            "price": 22.8,
             "expected_quali": 3.5999999999999996,
             "expected_sprint": 0.0,
             "expected_race": 4.8999999999999995,
@@ -160,10 +184,10 @@
             "expected_total": 8.5
           },
           {
-            "id": "norris",
+            "id": "117",
             "name": "Lando Norris",
-            "team": "Unknown",
-            "price": 11.8,
+            "team": "McLaren",
+            "price": 27.2,
             "expected_quali": 5.3999999999999995,
             "expected_sprint": 0.0,
             "expected_race": 5.6,
@@ -172,47 +196,23 @@
             "expected_total": 11.0
           },
           {
-            "id": "piastri",
+            "id": "1982",
             "name": "Oscar Piastri",
-            "team": "Unknown",
-            "price": 9.0,
+            "team": "McLaren",
+            "price": 25.5,
             "expected_quali": 4.8,
             "expected_sprint": 0.0,
             "expected_race": 6.3,
             "dnf_risk": 0.12,
             "price_growth": 0.85,
             "expected_total": 11.1
-          },
-          {
-            "id": "russell",
-            "name": "George Russell",
-            "team": "Unknown",
-            "price": 8.0,
-            "expected_quali": 4.2,
-            "expected_sprint": 0.0,
-            "expected_race": 4.199999999999999,
-            "dnf_risk": 0.12,
-            "price_growth": 0.65,
-            "expected_total": 8.4
-          },
-          {
-            "id": "max_verstappen",
-            "name": "Max Verstappen",
-            "team": "Unknown",
-            "price": 8.0,
-            "expected_quali": 6.0,
-            "expected_sprint": 0.0,
-            "expected_race": 7.0,
-            "dnf_risk": 0.12,
-            "price_growth": 1.0,
-            "expected_total": 13.0
           }
         ],
         "constructors": [
           {
-            "id": "cadillac",
-            "name": "Cadillac F1 Team",
-            "price": 22.0,
+            "id": "2640",
+            "name": "Audi",
+            "price": 6.6,
             "expected_quali": 1.5,
             "expected_sprint": 0.4,
             "expected_race": 2.8,
@@ -222,9 +222,9 @@
             "expected_total": 5.2
           },
           {
-            "id": "rb",
-            "name": "RB F1 Team",
-            "price": 12.0,
+            "id": "2641",
+            "name": "Cadillac",
+            "price": 6.0,
             "expected_quali": 1.5,
             "expected_sprint": 0.4,
             "expected_race": 2.8,
@@ -234,30 +234,30 @@
             "expected_total": 5.2
           }
         ],
-        "captain": "Max Verstappen",
+        "captain": "Oscar Piastri",
         "multipliers": {
           "captain": 2,
           "vice_captain": 1.2,
-          "vice_captain_name": "Oscar Piastri"
+          "vice_captain_name": "Lando Norris"
         },
-        "total_cost": 85.2,
+        "total_cost": 100.0,
         "expected_points": {
-          "total": 62.4,
-          "objective_adjusted": 65.265,
+          "total": 53.0,
+          "objective_adjusted": 54.939,
           "breakdown": {
-            "qualifying": 27.0,
-            "sprint": 0.8,
-            "race": 33.6,
+            "qualifying": 21.0,
+            "sprint": 1.6,
+            "race": 29.4,
             "pitstop": 1.0
           }
         },
         "risk": {
-          "downside_proxy": 0.129,
-          "avg_driver_dnf_risk": 0.12,
+          "downside_proxy": 0.1374,
+          "avg_driver_dnf_risk": 0.132,
           "avg_constructor_dnf_risk": 0.15
         },
         "growth": {
-          "price_growth_proxy": 4.8
+          "price_growth_proxy": 4.0
         },
         "solver": "pulp"
       },
@@ -265,10 +265,34 @@
         "strategy": "high_variance",
         "drivers": [
           {
-            "id": "leclerc",
+            "id": "121",
+            "name": "Sergio Perez",
+            "team": "Cadillac",
+            "price": 6.0,
+            "expected_quali": 2.1,
+            "expected_sprint": 0.4,
+            "expected_race": 3.5,
+            "dnf_risk": 0.15,
+            "price_growth": 0.425,
+            "expected_total": 6.0
+          },
+          {
+            "id": "13",
+            "name": "Valtteri Bottas",
+            "team": "Cadillac",
+            "price": 5.9,
+            "expected_quali": 2.1,
+            "expected_sprint": 0.4,
+            "expected_race": 3.5,
+            "dnf_risk": 0.15,
+            "price_growth": 0.425,
+            "expected_total": 6.0
+          },
+          {
+            "id": "115",
             "name": "Charles Leclerc",
-            "team": "Unknown",
-            "price": 14.4,
+            "team": "Ferrari",
+            "price": 22.8,
             "expected_quali": 3.5999999999999996,
             "expected_sprint": 0.0,
             "expected_race": 4.8999999999999995,
@@ -277,10 +301,10 @@
             "expected_total": 8.5
           },
           {
-            "id": "norris",
+            "id": "117",
             "name": "Lando Norris",
-            "team": "Unknown",
-            "price": 11.8,
+            "team": "McLaren",
+            "price": 27.2,
             "expected_quali": 5.3999999999999995,
             "expected_sprint": 0.0,
             "expected_race": 5.6,
@@ -289,47 +313,23 @@
             "expected_total": 11.0
           },
           {
-            "id": "piastri",
+            "id": "1982",
             "name": "Oscar Piastri",
-            "team": "Unknown",
-            "price": 9.0,
+            "team": "McLaren",
+            "price": 25.5,
             "expected_quali": 4.8,
             "expected_sprint": 0.0,
             "expected_race": 6.3,
             "dnf_risk": 0.12,
             "price_growth": 0.85,
             "expected_total": 11.1
-          },
-          {
-            "id": "russell",
-            "name": "George Russell",
-            "team": "Unknown",
-            "price": 8.0,
-            "expected_quali": 4.2,
-            "expected_sprint": 0.0,
-            "expected_race": 4.199999999999999,
-            "dnf_risk": 0.12,
-            "price_growth": 0.65,
-            "expected_total": 8.4
-          },
-          {
-            "id": "max_verstappen",
-            "name": "Max Verstappen",
-            "team": "Unknown",
-            "price": 8.0,
-            "expected_quali": 6.0,
-            "expected_sprint": 0.0,
-            "expected_race": 7.0,
-            "dnf_risk": 0.12,
-            "price_growth": 1.0,
-            "expected_total": 13.0
           }
         ],
         "constructors": [
           {
-            "id": "cadillac",
-            "name": "Cadillac F1 Team",
-            "price": 22.0,
+            "id": "2640",
+            "name": "Audi",
+            "price": 6.6,
             "expected_quali": 1.5,
             "expected_sprint": 0.4,
             "expected_race": 2.8,
@@ -339,9 +339,9 @@
             "expected_total": 5.2
           },
           {
-            "id": "rb",
-            "name": "RB F1 Team",
-            "price": 12.0,
+            "id": "2641",
+            "name": "Cadillac",
+            "price": 6.0,
             "expected_quali": 1.5,
             "expected_sprint": 0.4,
             "expected_race": 2.8,
@@ -351,30 +351,30 @@
             "expected_total": 5.2
           }
         ],
-        "captain": "Max Verstappen",
+        "captain": "Oscar Piastri",
         "multipliers": {
           "captain": 2,
           "vice_captain": 1.2,
-          "vice_captain_name": "Oscar Piastri"
+          "vice_captain_name": "Lando Norris"
         },
-        "total_cost": 85.2,
+        "total_cost": 100.0,
         "expected_points": {
-          "total": 62.4,
-          "objective_adjusted": 68.955,
+          "total": 53.0,
+          "objective_adjusted": 58.313,
           "breakdown": {
-            "qualifying": 27.0,
-            "sprint": 0.8,
-            "race": 33.6,
+            "qualifying": 21.0,
+            "sprint": 1.6,
+            "race": 29.4,
             "pitstop": 1.0
           }
         },
         "risk": {
-          "downside_proxy": 0.129,
-          "avg_driver_dnf_risk": 0.12,
+          "downside_proxy": 0.1374,
+          "avg_driver_dnf_risk": 0.132,
           "avg_constructor_dnf_risk": 0.15
         },
         "growth": {
-          "price_growth_proxy": 4.8
+          "price_growth_proxy": 4.0
         },
         "solver": "pulp"
       }
@@ -382,10 +382,27 @@
     "warnings": []
   },
   "transfer_plan": {
-    "transfers_used": 0,
+    "transfers_used": 4,
     "free_transfers": 2,
-    "penalty": 0,
-    "moves": [],
+    "penalty": -20,
+    "moves": [
+      {
+        "out": "George Russell",
+        "in": "Sergio Perez"
+      },
+      {
+        "out": "Max Verstappen",
+        "in": "Valtteri Bottas"
+      },
+      {
+        "out": "Cadillac F1 Team",
+        "in": "Audi"
+      },
+      {
+        "out": "RB F1 Team",
+        "in": "Cadillac"
+      }
+    ],
     "notes": [
       "Discipline rule: avoid -10 bleed unless objective-adjusted gain clearly exceeds hit."
     ]
@@ -397,21 +414,21 @@
   "explanations": {
     "safe": [
       "Constructors-first: pitstop+aggregate projection contributes 1.0 expected points.",
-      "Reliability tax: downside proxy held at 0.129 by avoiding fragile pairings.",
+      "Reliability tax: downside proxy held at 0.1374 by avoiding fragile pairings.",
       "Budget growth: lineup keeps high trend assets to compound future flexibility.",
       "Transfer discipline: plan prioritizes minimal changes to avoid avoidable -10 penalties.",
       "Chip principle: recommendation picks the chip aligned to predictability and captain certainty."
     ],
     "balanced": [
       "Constructors-first: pitstop+aggregate projection contributes 1.0 expected points.",
-      "Reliability tax: downside proxy held at 0.129 by avoiding fragile pairings.",
+      "Reliability tax: downside proxy held at 0.1374 by avoiding fragile pairings.",
       "Budget growth: lineup keeps high trend assets to compound future flexibility.",
       "Transfer discipline: plan prioritizes minimal changes to avoid avoidable -10 penalties.",
       "Chip principle: recommendation picks the chip aligned to predictability and captain certainty."
     ],
     "high_variance": [
       "Constructors-first: pitstop+aggregate projection contributes 1.0 expected points.",
-      "Reliability tax: downside proxy held at 0.129 by avoiding fragile pairings.",
+      "Reliability tax: downside proxy held at 0.1374 by avoiding fragile pairings.",
       "Budget growth: lineup keeps high trend assets to compound future flexibility.",
       "Transfer discipline: plan prioritizes minimal changes to avoid avoidable -10 penalties.",
       "Chip principle: recommendation picks the chip aligned to predictability and captain certainty."

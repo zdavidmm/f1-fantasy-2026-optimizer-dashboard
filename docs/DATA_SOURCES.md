@@ -1,11 +1,13 @@
 # Data Sources
 
-## Fantasy API (`fantasy-api.formula1.com`)
-- Intended for driver/constructor IDs, prices, and event structures.
-- Endpoints are configurable in `config.yaml`.
-- Parser is resilient: best-effort field extraction + schema validation.
+## Official Fantasy Feeds (`fantasy.formula1.com/feeds`)
+- Primary live source for driver/constructor prices and game-day schedule.
+- Uses `schedule/raceday_en.json` to detect current game day and `drivers/{gameday}_en.json` for prices.
 - Raw payloads are stored in `public/data/raw/` for debugging.
-- Fallback path: cached payloads or synthetic pool if endpoint unavailable.
+
+## Legacy Fantasy API (`fantasy-api.formula1.com`)
+- Secondary/best-effort fallback if feed parsing fails.
+- Endpoints remain configurable in `config.yaml`.
 
 ## FastF1
 - Pulls event schedule and session results (Q/S/R as available).
