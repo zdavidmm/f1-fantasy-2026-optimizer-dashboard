@@ -1,6 +1,6 @@
 # F1 Fantasy 2026 Lineup Optimizer + Dashboard
 
-[![build-and-deploy](https://github.com/YOUR_GITHUB_USERNAME/f1-fantasy-2026-optimizer-dashboard/actions/workflows/build.yml/badge.svg)](https://github.com/YOUR_GITHUB_USERNAME/f1-fantasy-2026-optimizer-dashboard/actions/workflows/build.yml)
+[![build-and-deploy](https://github.com/zdavidmm/f1-fantasy-2026-optimizer-dashboard/actions/workflows/build.yml/badge.svg)](https://github.com/zdavidmm/f1-fantasy-2026-optimizer-dashboard/actions/workflows/build.yml)
 
 Static F1 Fantasy optimizer that fetches live data, computes recommended lineups (Safe/Balanced/High-variance), creates transfer/chip recommendations, and deploys a dashboard to GitHub Pages.
 
