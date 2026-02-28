@@ -313,6 +313,11 @@ pre {
   font-weight: 800;
   color: #fde68a;
 }
+.tz-line {
+  margin-top: .3rem;
+  color: #c7d2fe;
+  font-size: .82rem;
+}
 @keyframes rise {
   from { transform: translateY(8px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -421,7 +426,7 @@ def build_site(config_path: str = "config.yaml") -> None:
     home_body = f"""
     <section class='hero'>
       <h1>Lineup Optimizer + Dashboard</h1>
-      <p>Generated at {data.get('meta', {}).get('generated_at_utc', 'N/A')} UTC</p>
+      <p>Generated at <span class='local-time' data-utc='{data.get('meta', {}).get('generated_at_utc', 'N/A')}'>{data.get('meta', {}).get('generated_at_utc', 'N/A')} UTC</span></p>
       <div class='stats'>
         <div class='stat'><div class='k'>Balanced Expected</div><div class='v'>{balanced.get('expected_points', {}).get('total', 'N/A')}</div></div>
         <div class='stat'><div class='k'>Balanced Cost</div><div class='v'>{balanced.get('total_cost', 'N/A')}</div></div>
@@ -434,6 +439,7 @@ def build_site(config_path: str = "config.yaml") -> None:
         <h2>Data + Next Race</h2>
         <p class='subtle'>Live prices sourced from official Fantasy feeds. Use the links below for quick team actions.</p>
         {next_race_block}
+        <div id='timezoneLine' class='tz-line'>Timezone: detecting...</div>
         <div class='cta-row'>
           <a class='btn' href='{my_team_url}' target='_blank' rel='noopener noreferrer'>Open My Team</a>
           <a class='btn alt' href='{fantasy_home_url}' target='_blank' rel='noopener noreferrer'>Fantasy Home</a>
@@ -468,7 +474,41 @@ def build_site(config_path: str = "config.yaml") -> None:
       const s = Math.floor((diff % 60000) / 1000);
       el.textContent = `${{d}}d ${{h}}h ${{m}}m ${{s}}s until next race`;
     }}
+    function applyLocalTimes(){{
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local Time';
+      const tzLine = document.getElementById('timezoneLine');
+      if(tzLine) tzLine.textContent = `Timezone: ${{tz}}`;
+      document.querySelectorAll('.local-time').forEach((el)=>{{
+        const raw = el.dataset.utc;
+        const dt = new Date(raw);
+        if(Number.isNaN(dt.getTime())) return;
+        const local = new Intl.DateTimeFormat([], {{
+          year:'numeric', month:'short', day:'2-digit',
+          hour:'2-digit', minute:'2-digit', second:'2-digit',
+          timeZoneName:'short'
+        }}).format(dt);
+        el.textContent = `${{local}}`;
+      }});
+      const cd = document.getElementById('countdown');
+      if(cd && cd.dataset.target){{
+        const target = new Date(cd.dataset.target);
+        if(!Number.isNaN(target.getTime())){{
+          const localTarget = new Intl.DateTimeFormat([], {{
+            year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit', timeZoneName:'short'
+          }}).format(target);
+          const p = cd.parentElement;
+          if(p){{
+            const existing = p.querySelector('.local-deadline');
+            const line = existing || document.createElement('p');
+            line.className = 'subtle local-deadline';
+            line.textContent = `Local deadline: ${{localTarget}}`;
+            if(!existing) p.insertBefore(line, cd);
+          }}
+        }}
+      }}
+    }}
     if(tabs.length) showTab(tabs[0].textContent);
+    applyLocalTimes();
     tickCountdown();
     setInterval(tickCountdown, 1000);
     </script>
