@@ -120,6 +120,7 @@ def run_pipeline(mode: str) -> dict[str, Any]:
 
     payload = {
         "meta": dataset["meta"],
+        "event_schedule": dataset["fantasy"].get("events", []),
         "sources": {
             "fantasy_api": fantasy.source_status,
             "fastf1": {

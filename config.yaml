@@ -41,3 +41,7 @@ optimizer:
     - balanced
     - high_variance
   random_seed: null
+site:
+  my_team_url: "https://fantasy.formula1.com/en/my-team/1"
+  fantasy_home_url: "https://fantasy.formula1.com/en/"
+  official_schedule_url: "https://www.formula1.com/en/racing/2026.html"

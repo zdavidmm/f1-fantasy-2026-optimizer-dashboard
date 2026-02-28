@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +17,62 @@ def _write(path: str | Path, content: str) -> None:
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(content, encoding="utf-8")
+
+
+def _parse_event_datetime(event: dict[str, Any]) -> datetime | None:
+    # Feed can expose multiple timestamp formats depending on endpoint version.
+    candidates = [
+        event.get("NextMatchDeadline"),
+        event.get("SessionStartDateISO8601"),
+        event.get("SessionStartDate"),
+        event.get("GameDate"),
+    ]
+    for raw in candidates:
+        if not raw or not isinstance(raw, str):
+            continue
+        raw = raw.strip()
+        try:
+            if "T" in raw:
+                return datetime.fromisoformat(raw.replace("Z", "+00:00")).astimezone(timezone.utc)
+            return datetime.strptime(raw, "%m/%d/%Y %H:%M:%S").replace(tzinfo=timezone.utc)
+        except Exception:  # noqa: BLE001
+            continue
+    return None
+
+
+def _next_race_info(events: list[dict[str, Any]]) -> dict[str, Any] | None:
+    now = datetime.now(timezone.utc)
+    candidates: list[dict[str, Any]] = []
+    for ev in events:
+        if not isinstance(ev, dict):
+            continue
+        dt_obj = _parse_event_datetime(ev)
+        if not dt_obj:
+            continue
+        if dt_obj <= now:
+            continue
+        candidates.append({"event": ev, "dt": dt_obj})
+    if not candidates:
+        return None
+    candidates.sort(key=lambda x: x["dt"])
+    picked = candidates[0]
+    ev = picked["event"]
+    dt_obj = picked["dt"]
+    name = str(
+        ev.get("MeetingOfficialName")
+        or ev.get("MeetingName")
+        or ev.get("RaceName")
+        or ev.get("CircuitOfficialName")
+        or f"Gameday {ev.get('GamedayId', 'N/A')}"
+    )
+    loc = str(ev.get("CircuitLocation") or ev.get("MeetingLocation") or "Unknown location")
+    return {
+        "name": name,
+        "location": loc,
+        "gameday_id": ev.get("GamedayId"),
+        "target_iso": dt_obj.isoformat().replace("+00:00", "Z"),
+        "target_label": dt_obj.strftime("%Y-%m-%d %H:%M UTC"),
+    }
 
 
 def _base_html(title: str, body: str) -> str:
@@ -233,6 +290,29 @@ pre {
 }
 .warn { color: #fca5a5; }
 .note { color: #93c5fd; }
+.subtle { color: var(--muted); font-size: .86rem; }
+.cta-row { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .7rem; }
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  color: #0b1020;
+  font-weight: 800;
+  font-size: .84rem;
+  padding: .5rem .82rem;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+.btn.alt {
+  color: #dbeafe;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(148,163,184,.35);
+}
+.countdown {
+  margin-top: .5rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fde68a;
+}
 @keyframes rise {
   from { transform: translateY(8px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -323,6 +403,20 @@ def build_site(config_path: str = "config.yaml") -> None:
     balanced = strategies.get("balanced", {})
     transfer = data.get("transfer_plan", {})
     chip = data.get("chip_suggestion", {})
+    site_cfg = config.get("site", {})
+    my_team_url = site_cfg.get("my_team_url", "https://fantasy.formula1.com/en/my-team/1")
+    fantasy_home_url = site_cfg.get("fantasy_home_url", "https://fantasy.formula1.com/en/")
+    official_schedule_url = site_cfg.get("official_schedule_url", "https://www.formula1.com/en/racing/2026.html")
+    next_race = _next_race_info(data.get("event_schedule", []))
+    next_race_block = (
+        (
+            f"<p><strong>{next_race['name']}</strong> ({next_race['location']})</p>"
+            f"<p class='subtle'>Next deadline: {next_race['target_label']} · Gameday {next_race['gameday_id']}</p>"
+            f"<div id='countdown' class='countdown' data-target='{next_race['target_iso']}'>Countdown loading...</div>"
+        )
+        if next_race
+        else "<p class='subtle'>Next race deadline unavailable from current feed payload.</p>"
+    )
 
     home_body = f"""
     <section class='hero'>
@@ -337,6 +431,16 @@ def build_site(config_path: str = "config.yaml") -> None:
     </section>
     <section class='grid'>
       <div class='card'>
+        <h2>Data + Next Race</h2>
+        <p class='subtle'>Live prices sourced from official Fantasy feeds. Use the links below for quick team actions.</p>
+        {next_race_block}
+        <div class='cta-row'>
+          <a class='btn' href='{my_team_url}' target='_blank' rel='noopener noreferrer'>Open My Team</a>
+          <a class='btn alt' href='{fantasy_home_url}' target='_blank' rel='noopener noreferrer'>Fantasy Home</a>
+          <a class='btn alt' href='{official_schedule_url}' target='_blank' rel='noopener noreferrer'>F1 Schedule 2026</a>
+        </div>
+      </div>
+      <div class='card'>
         <h2>Strategy Switcher</h2>
         <div class='tab-row'>{tabs}</div>
       </div>
@@ -350,7 +454,23 @@ def build_site(config_path: str = "config.yaml") -> None:
       if(pane) pane.style.display='block';
       tabs.forEach(t=>t.classList.toggle('active', t.textContent===name));
     }}
+    function tickCountdown(){{
+      const el = document.getElementById('countdown');
+      if(!el) return;
+      const target = new Date(el.dataset.target);
+      if(Number.isNaN(target.getTime())){{ el.textContent='Countdown unavailable'; return; }}
+      const now = new Date();
+      const diff = target - now;
+      if(diff <= 0){{ el.textContent='Race weekend in progress'; return; }}
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.textContent = `${{d}}d ${{h}}h ${{m}}m ${{s}}s until next race`;
+    }}
     if(tabs.length) showTab(tabs[0].textContent);
+    tickCountdown();
+    setInterval(tickCountdown, 1000);
     </script>
     """
     _write(dist / "index.html", _base_html("F1 Fantasy 2026 Optimizer", home_body))
