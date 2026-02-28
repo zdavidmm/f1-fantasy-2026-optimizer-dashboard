@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "generated_at_utc": "2026-02-28T00:00:00Z",
+    "mode": "sample"
+  },
+  "sources": {
+    "fantasy_api": {
+      "fantasy_drivers": "sample",
+      "fantasy_constructors": "sample",
+      "fantasy_events": "sample"
+    },
+    "fastf1": {
+      "status": "sample",
+      "event": {
+        "round": 1,
+        "name": "Sample Grand Prix"
+      }
+    },
+    "openf1": {
+      "enabled": false,
+      "status": "sample"
+    }
+  },
+  "lineups": {
+    "strategies": {
+      "safe": {
+        "strategy": "safe",
+        "drivers": [
+          {"name": "Max Verstappen", "price": 30.0, "expected_total": 12.6},
+          {"name": "Lando Norris", "price": 27.0, "expected_total": 11.9},
+          {"name": "Charles Leclerc", "price": 25.0, "expected_total": 11.1},
+          {"name": "George Russell", "price": 23.0, "expected_total": 10.5},
+          {"name": "Oscar Piastri", "price": 24.0, "expected_total": 10.9}
+        ],
+        "constructors": [
+          {"name": "McLaren", "price": 27.0, "expected_total": 8.1},
+          {"name": "Ferrari", "price": 26.0, "expected_total": 7.8}
+        ],
+        "captain": "Max Verstappen",
+        "expected_points": {"total": 72.9, "objective_adjusted": 69.8, "breakdown": {"qualifying": 20.1, "sprint": 9.2, "race": 38.8, "pitstop": 4.8}},
+        "risk": {"downside_proxy": 0.11},
+        "total_cost": 182.0
+      },
+      "balanced": {
+        "strategy": "balanced",
+        "drivers": [
+          {"name": "Max Verstappen", "price": 30.0, "expected_total": 12.6},
+          {"name": "Lando Norris", "price": 27.0, "expected_total": 11.9},
+          {"name": "Charles Leclerc", "price": 25.0, "expected_total": 11.1},
+          {"name": "George Russell", "price": 23.0, "expected_total": 10.5},
+          {"name": "Lewis Hamilton", "price": 22.0, "expected_total": 10.1}
+        ],
+        "constructors": [
+          {"name": "McLaren", "price": 27.0, "expected_total": 8.1},
+          {"name": "Mercedes", "price": 24.0, "expected_total": 7.2}
+        ],
+        "captain": "Max Verstappen",
+        "expected_points": {"total": 71.5, "objective_adjusted": 69.4, "breakdown": {"qualifying": 19.5, "sprint": 8.7, "race": 38.5, "pitstop": 4.8}},
+        "risk": {"downside_proxy": 0.14},
+        "total_cost": 178.0
+      },
+      "high_variance": {
+        "strategy": "high_variance",
+        "drivers": [
+          {"name": "Max Verstappen", "price": 30.0, "expected_total": 12.6},
+          {"name": "Lando Norris", "price": 27.0, "expected_total": 11.9},
+          {"name": "Fernando Alonso", "price": 18.0, "expected_total": 8.0},
+          {"name": "Pierre Gasly", "price": 14.0, "expected_total": 6.7},
+          {"name": "Oscar Piastri", "price": 24.0, "expected_total": 10.9}
+        ],
+        "constructors": [
+          {"name": "Red Bull", "price": 29.0, "expected_total": 8.8},
+          {"name": "McLaren", "price": 27.0, "expected_total": 8.1}
+        ],
+        "captain": "Max Verstappen",
+        "expected_points": {"total": 67.0, "objective_adjusted": 66.2, "breakdown": {"qualifying": 17.8, "sprint": 7.7, "race": 36.0, "pitstop": 5.5}},
+        "risk": {"downside_proxy": 0.21},
+        "total_cost": 169.0
+      }
+    }
+  },
+  "transfer_plan": {
+    "transfers_used": 0,
+    "free_transfers": 2,
+    "penalty": 0,
+    "moves": []
+  },
+  "chip_suggestion": {
+    "chip": "Wildcard",
+    "reason": "Sample recommendation for pre-live initialization."
+  },
+  "explanations": {
+    "balanced": [
+      "Constructors-first: pitstop+aggregate projection contributes 4.8 expected points.",
+      "Reliability tax: downside proxy held at 0.14 by avoiding fragile pairings.",
+      "Budget growth: lineup keeps high trend assets to compound future flexibility."
+    ]
+  },
+  "warnings": [
+    "Sample data only. Run pipeline for live updates."
+  ],
+  "missing_components": [
+    "overtakes"
+  ]
+}

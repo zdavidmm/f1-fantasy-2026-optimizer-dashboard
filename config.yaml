@@ -1,0 +1,43 @@
+budget_cap: 180.0
+world_record_pitstop_threshold: 1.80
+model_weights:
+  qualifying_form: 0.30
+  race_form: 0.35
+  sprint_form: 0.10
+  reliability: 0.15
+  pitstop_constructor: 0.10
+risk_weights:
+  safe: 0.30
+  balanced: 0.15
+  high_variance: 0.05
+price_growth_weights:
+  safe: 0.05
+  balanced: 0.10
+  high_variance: 0.15
+fantasy_api:
+  base_url: "https://fantasy-api.formula1.com"
+  timeout_seconds: 15
+  endpoints:
+    drivers:
+      - "/partner_games/f1/players"
+      - "/players"
+    constructors:
+      - "/partner_games/f1/constructors"
+      - "/constructors"
+    events:
+      - "/partner_games/f1/events"
+      - "/events"
+fastf1:
+  cache_dir: "fastf1_cache"
+providers:
+  cache_dir: "provider_cache"
+  raw_dir: "public/data/raw"
+  latest_json: "public/data/latest.json"
+  summary_md: "public/data/summary.md"
+  history_dir: "public/data/history"
+optimizer:
+  strategies:
+    - safe
+    - balanced
+    - high_variance
+  random_seed: null

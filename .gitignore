@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+.venv/
+.env
+.DS_Store
+fastf1_cache/
+provider_cache/
+public/data/cache/
+public/data/raw/
+dist/
+public/data/history/*.json
+*.pyc
